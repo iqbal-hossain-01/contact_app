@@ -380,8 +380,8 @@ class _NewContactPageState extends State<NewContactPage> {
         email: _emailController.text.isNotEmpty ? _emailController.text : null,
         dob: getFormattedDate(_selectedDate),
         group: _group,
-        address: _addressController.text.isNotEmpty ? _emailController.text : null,
-        website: _webController.text.isNotEmpty ? _emailController.text : null,
+        address: _addressController.text.isNotEmpty ? _addressController.text : null,
+        website: _webController.text.isNotEmpty ? _webController.text : null,
         image: _imagePath,
       );
       context.read<LocalDbProvider>().addContact(contact)

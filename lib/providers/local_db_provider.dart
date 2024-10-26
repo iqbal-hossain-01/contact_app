@@ -27,4 +27,14 @@ class LocalDbProvider with ChangeNotifier{
     _contactList = await _db.getAllContact();
     notifyListeners();
   }
+
+  Future<void> deleteContact(ContactModel contact) async {
+    await _db.deleteContact(contact.id!);
+    _contactList.removeWhere((c) => c.id == contact.id);
+    notifyListeners();
+  }
+
+  Future<ContactModel> getContactById(int id) async {
+    return _db.getContactById(id);
+  }
 }
