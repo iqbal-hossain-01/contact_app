@@ -55,4 +55,31 @@ class ContactModel {
       favorite: map['favorite'] == 0 ? false : true,
     );
   }
+  ContactModel copyWith({
+    int? id,
+    String? name,
+    String? number,
+    String? email,
+    String? gender,
+    String? address,
+    String? website,
+    String? image,
+    String? dob,
+    String? group,
+    bool? favorite, // Keep this non-nullable
+  }) {
+    return ContactModel(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      number: number ?? this.number,
+      email: email ?? this.email,
+      gender: gender ?? this.gender,
+      address: address ?? this.address,
+      website: website ?? this.website,
+      image: image ?? this.image,
+      dob: dob ?? this.dob,
+      group: group ?? this.group,
+      favorite: favorite ?? this.favorite, // Ensure this is non-nullable
+    );
+  }
 }

@@ -42,12 +42,24 @@ class DbHelper {
 
   Future<int> deleteContact(int id) async {
     final db = await _open();
-    return db.delete(tableContact, where: '$tblContactColId = ?', whereArgs: [id]);
+    return db
+        .delete(tableContact, where: '$tblContactColId = ?', whereArgs: [id]);
   }
 
   Future<ContactModel> getContactById(int id) async {
     final db = await _open();
-    final mapList = await db.query(tableContact, where: '$tblContactColId = ?', whereArgs: [id]);
+    final mapList = await db
+        .query(tableContact, where: '$tblContactColId = ?', whereArgs: [id]);
     return ContactModel.fromMap(mapList.first);
+  }
+
+  Future<int> updatedFavorite(int id, int value) async {
+    final db = await _open();
+    return db.update(
+      tableContact,
+      {tblContactColFavorite: value},
+      where: '$tblContactColId = ?',
+      whereArgs: [id]
+    );
   }
 }

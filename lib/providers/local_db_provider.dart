@@ -37,4 +37,15 @@ class LocalDbProvider with ChangeNotifier{
   Future<ContactModel> getContactById(int id) async {
     return _db.getContactById(id);
   }
+
+  Future<void> updatedFavorite(ContactModel contact) async {
+    final updatedFavoriteValue = contact.favorite ? 0 : 1;
+    final updatedRowId = await _db.updatedFavorite(contact.id!, updatedFavoriteValue);
+    //await _db.updatedFavorite(contact.id!, updatedFavoriteValue);
+    final position = _contactList.indexOf(contact);
+    _contactList[position].favorite = !_contactList[position].favorite;
+    //contact.favorite = !contact.favorite;
+    notifyListeners();
+  }
+
 }
