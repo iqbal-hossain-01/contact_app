@@ -39,6 +39,11 @@ class _HomePageState extends State<HomePage> {
             onPressed: () {
               Navigator.pushNamed(context, NewContactPage.routeName);
             },
+            icon: const Icon(Icons.add),
+          ),
+          IconButton(
+            onPressed: () {
+            },
             icon: const Icon(Icons.settings_outlined),
           )
         ],
