@@ -4,8 +4,12 @@ import 'package:flutter/foundation.dart';
 
 class LocalDbProvider with ChangeNotifier{
   List<ContactModel> _contactList = [];
+  List<ContactModel> _favoriteContactList = [];
+
   List<ContactModel> get contactList => _contactList;
+  List<ContactModel> get favoriteContactList => _favoriteContactList;
   final _db = DbHelper();
+
 
   Future<void> addContact(ContactModel contact) async {
     final rowId = await _db.insertContact(contact);
@@ -28,6 +32,12 @@ class LocalDbProvider with ChangeNotifier{
     notifyListeners();
   }
 
+  Future<void> getAllFavoriteContacts() async {
+    _contactList = await _db.getAllFavoriteContact();
+    _favoriteContactList = _contactList.where((c) => c.favorite == true).toList();
+    notifyListeners();
+  }
+
   Future<void> deleteContact(ContactModel contact) async {
     await _db.deleteContact(contact.id!);
     _contactList.removeWhere((c) => c.id == contact.id);
@@ -40,8 +50,8 @@ class LocalDbProvider with ChangeNotifier{
 
   Future<void> updatedFavorite(ContactModel contact) async {
     final updatedFavoriteValue = contact.favorite ? 0 : 1;
-    final updatedRowId = await _db.updatedFavorite(contact.id!, updatedFavoriteValue);
-    //await _db.updatedFavorite(contact.id!, updatedFavoriteValue);
+    //final updatedRowId = await _db.updatedFavorite(contact.id!, updatedFavoriteValue);
+    await _db.updatedFavorite(contact.id!, updatedFavoriteValue);
     final position = _contactList.indexOf(contact);
     _contactList[position].favorite = !_contactList[position].favorite;
     //contact.favorite = !contact.favorite;

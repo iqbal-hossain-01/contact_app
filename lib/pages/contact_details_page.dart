@@ -6,11 +6,16 @@ import 'package:contact_app/providers/local_db_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class ContactDetailsPage extends StatelessWidget {
+class ContactDetailsPage extends StatefulWidget {
   static const String routeName = '/detail';
 
   const ContactDetailsPage({super.key});
 
+  @override
+  State<ContactDetailsPage> createState() => _ContactDetailsPageState();
+}
+
+class _ContactDetailsPageState extends State<ContactDetailsPage> {
   @override
   Widget build(BuildContext context) {
     final id = ModalRoute.of(context)!.settings.arguments as int;
@@ -61,6 +66,7 @@ class ContactDetailsPage extends StatelessWidget {
                         children: [
                           IconButton(onPressed: () {
                             provider.updatedFavorite(contact);
+                            setState(() {});
                           }, icon: Icon(contact.favorite ? Icons.favorite : Icons.favorite_border),
                           color: contact.favorite ? Colors.amber : null,),
                           Text(contact.name!, style: const TextStyle(fontSize: 22),),
@@ -120,6 +126,7 @@ class ContactDetailsPage extends StatelessWidget {
     );
   }
 }
+
 /*
 import 'dart:io';
 import 'package:contact_app/models/contact_model.dart';

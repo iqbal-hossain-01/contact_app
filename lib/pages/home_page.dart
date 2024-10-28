@@ -106,6 +106,9 @@ class _HomePageState extends State<HomePage> {
             setState(() {
               _currentIndex = index;
             });
+            _currentIndex == 0
+              ? context.read<LocalDbProvider>().getAllContacts()
+              : context.read<LocalDbProvider>().getAllFavoriteContacts();
           },
           selectedItemColor: Colors.blue,
           items: const [
