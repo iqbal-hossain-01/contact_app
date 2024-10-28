@@ -58,4 +58,12 @@ class LocalDbProvider with ChangeNotifier{
     notifyListeners();
   }
 
+  Future<void> updateContact(ContactModel contact) async {
+    await _db.updateContact(contact);
+    final position = _contactList.indexWhere((c) => c.id == contact.id);
+    _contactList.removeAt(position);
+    _contactList.insert(position, contact);
+    notifyListeners();
+  }
+
 }

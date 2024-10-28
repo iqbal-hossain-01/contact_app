@@ -2,6 +2,7 @@
 import 'dart:io';
 
 import 'package:contact_app/models/contact_model.dart';
+import 'package:contact_app/pages/new_contact_page.dart';
 import 'package:contact_app/providers/local_db_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -16,16 +17,24 @@ class ContactDetailsPage extends StatefulWidget {
 }
 
 class _ContactDetailsPageState extends State<ContactDetailsPage> {
+  late int id;
+  @override
+  void didChangeDependencies() {
+    id = ModalRoute.of(context)!.settings.arguments as int;
+    super.didChangeDependencies();
+  }
   @override
   Widget build(BuildContext context) {
-    final id = ModalRoute.of(context)!.settings.arguments as int;
     return Scaffold(
       appBar: AppBar(
         title: const Text('Details'),
-        backgroundColor: Colors.blueGrey,
+        backgroundColor: Colors.grey.withOpacity(0.3),
         actions: [
           TextButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.pushNamed(context, NewContactPage.routeName, arguments: id)
+                  .then((_) {setState(() {});});
+            },
             child: const Text('Edit'),
           ),
           IconButton(
@@ -58,7 +67,7 @@ class _ContactDetailsPageState extends State<ContactDetailsPage> {
                   // ListTile(
                   //   title: Text('${contact.name?.isNotEmpty == true ? contact.name : ''}'),
                   // ),
-                  if (contact.name?.isNotEmpty == true)
+                  //if (contact.name?.isNotEmpty == true)
                     ListTile(
                       title: Row(
                         mainAxisSize: MainAxisSize.min,
@@ -69,12 +78,14 @@ class _ContactDetailsPageState extends State<ContactDetailsPage> {
                             setState(() {});
                           }, icon: Icon(contact.favorite ? Icons.favorite : Icons.favorite_border),
                           color: contact.favorite ? Colors.amber : null,),
-                          Text(contact.name!, style: const TextStyle(fontSize: 22),),
+                          Text(contact.name?.isNotEmpty == true ? contact.name!.trim()
+                              : contact.number.trim(),
+                            style: const TextStyle(fontSize: 22),),
                         ],
                       )
                     ),
                   ListTile(
-                    title: Text(contact.number),
+                    title: Text(contact.number.trim()),
                     trailing: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -85,17 +96,17 @@ class _ContactDetailsPageState extends State<ContactDetailsPage> {
                   ),
                   if (contact.email?.isNotEmpty == true)
                     ListTile(
-                      title: Text(contact.email!),
+                      title: Text(contact.email!.trim()),
                       trailing: const Icon(Icons.email),
                     ),
                   if (contact.address?.isNotEmpty == true)
                     ListTile(
-                      title: Text(contact.address!),
+                      title: Text(contact.address!.trim()),
                       trailing: const Icon(Icons.location_city_sharp),
                     ),
                   if (contact.website?.isNotEmpty == true)
                     ListTile(
-                      title: Text(contact.website!),
+                      title: Text(contact.website!.trim()),
                       trailing: const Icon(Icons.web),
                     ),
                   if (contact.dob?.isNotEmpty == true)

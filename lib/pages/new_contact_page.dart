@@ -30,14 +30,46 @@ class _NewContactPageState extends State<NewContactPage> {
   Gender? gender;
   String? _imagePath;
   final _formKey = GlobalKey<FormState>();
+  late bool _isUpdating;
+  int? updateContactId;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final arg = ModalRoute.of(context)?.settings.arguments;
+    if (arg != null) {
+      updateContactId = arg as int;
+      context.read<LocalDbProvider>().getContactById(updateContactId!)
+        .then((contact) {
+          setState(() {
+            _nameController.text = (contact.name?.isNotEmpty == true ? contact.name! : null)!;
+            _numberController.text = contact.number;
+            _emailController.text = (contact.email?.isNotEmpty == true ? contact.email! : null)!;
+            _webController.text = (contact.website?.isNotEmpty == true ? contact.website! : null)!;
+            _addressController.text = (contact.address?.isNotEmpty == true ? contact.address! : null)!;
+            _imagePath = contact.image?.isNotEmpty == true ? contact.image! : null;
+            _group = contact.group?.isNotEmpty == true ? contact.group! : null;
+            if (contact.dob != null) {
+              _selectedDate = DateTime.parse(contact.dob!);
+            } else {
+              _selectedDate = null;
+            }
+            gender = contact.gender == Gender.Male.name ? Gender.Male : Gender.Female;
+          });
+
+      });
+
+    }
+    _isUpdating = updateContactId == null ? false : true;
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('New contact'),
+        title: Text(_isUpdating ? 'Update contact' : 'New contact'),
         centerTitle: true,
-        backgroundColor: Colors.grey,
+        backgroundColor: _isUpdating ? Colors.grey.withOpacity(0.3) : null,
         actions: [
           TextButton(
             onPressed: _contactSave,
@@ -384,14 +416,26 @@ class _NewContactPageState extends State<NewContactPage> {
         website: _webController.text.isNotEmpty ? _webController.text : null,
         image: _imagePath,
       );
-      context.read<LocalDbProvider>().addContact(contact)
-      .then((value) {
-        showMsg(context, 'Saved');
-        Navigator.pop(context);
-      })
-      .catchError((error) {
-        showMsg(context, error.toString());
-      });
+      if (_isUpdating) {
+        contact.id = updateContactId;
+        context.read<LocalDbProvider>().updateContact(contact)
+            .then((value) {
+          showMsg(context, 'Updated');
+          Navigator.pop(context);
+        })
+            .catchError((error) {
+          showMsg(context, error.toString());
+        });
+      } else {
+        context.read<LocalDbProvider>().addContact(contact)
+            .then((value) {
+          showMsg(context, 'Saved');
+          Navigator.pop(context);
+        })
+            .catchError((error) {
+          showMsg(context, error.toString());
+        });
+      }
     }
   }
 

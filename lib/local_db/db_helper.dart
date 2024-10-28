@@ -73,4 +73,9 @@ class DbHelper {
       whereArgs: [id]
     );
   }
+
+  Future<int> updateContact(ContactModel contact) async {
+    final db = await _open();
+    return db.update(tableContact, contact.toMap(), where: '$tblContactColId = ?', whereArgs: [contact.id]);
+  }
 }

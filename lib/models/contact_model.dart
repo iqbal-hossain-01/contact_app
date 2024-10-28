@@ -26,7 +26,7 @@ class ContactModel {
   });
 
   Map<String, dynamic> toMap() {
-    return {
+    final map =  <String, dynamic>{
       'name': name,
       'number': number,
       'email': email,
@@ -38,6 +38,10 @@ class ContactModel {
       'image': image,
       'favorite': favorite ? 1 : 0,
     };
+    if (id != null) {
+      map['id'] = id;
+    }
+    return map;
   }
 
   factory ContactModel.fromMap(Map<String, dynamic> map) {
