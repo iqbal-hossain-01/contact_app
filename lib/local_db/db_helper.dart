@@ -20,8 +20,11 @@ class DbHelper {
   Future<Database> _open() async {
     final rootPath = await getDatabasesPath();
     final dbPath = path.join(rootPath, 'contact.db');
-    return openDatabase(dbPath, version: 1, onCreate: (db, version) {
-      db.execute(createTableContact);
+    return openDatabase(dbPath, version: 2, onCreate: (db, version) {
+      db.execute(createTableContact);}, onUpgrade: (db, oldVersion, newVersion) {
+      if (newVersion == 2) {
+        db.execute('ALTER TABLE $tableContact ADD COLUMN $tblContactColDobTimestamp DEFAULT NULL');
+      }
     });
   }
 

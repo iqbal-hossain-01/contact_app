@@ -54,6 +54,11 @@ class _NewContactPageState extends State<NewContactPage> {
             } else {
               _selectedDate = null;
             }
+            if (contact.dobTimestamp != null) {
+              _selectedDate = DateTime.fromMillisecondsSinceEpoch(contact.dobTimestamp!);
+            } else {
+              _selectedDate = null;
+            }
             gender = contact.gender == Gender.Male.name ? Gender.Male : Gender.Female;
           });
 
@@ -411,6 +416,7 @@ class _NewContactPageState extends State<NewContactPage> {
         gender: gender?.name,
         email: _emailController.text.isNotEmpty ? _emailController.text : null,
         dob: getFormattedDate(_selectedDate),
+        dobTimestamp: _selectedDate?.millisecondsSinceEpoch,
         group: _group,
         address: _addressController.text.isNotEmpty ? _addressController.text : null,
         website: _webController.text.isNotEmpty ? _webController.text : null,

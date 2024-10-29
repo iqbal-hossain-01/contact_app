@@ -13,6 +13,7 @@ const tblContactColNumber = 'number';
 const tblContactColEmail = 'email';
 const tblContactColGender = 'gender';
 const tblContactColDob = 'dob';
+const tblContactColDobTimestamp = 'dob_timestamp';
 const tblContactColGroup = 'contact_group';
 const tblContactColAddress = 'address';
 const tblContactColWebsite = 'website';

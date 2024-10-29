@@ -8,6 +8,7 @@ class ContactModel {
   String? website;
   String? image;
   String? dob;
+  int? dobTimestamp;
   String? group;
   bool favorite;
 
@@ -21,6 +22,7 @@ class ContactModel {
     this.website,
     this.image,
     this.dob,
+    this.dobTimestamp,
     this.group,
     this.favorite = false,
   });
@@ -32,6 +34,7 @@ class ContactModel {
       'email': email,
       'gender': gender,
       'dob': dob,
+      'dob_timestamp': dobTimestamp,
       'contact_group': group,
       'address': address,
       'website': website,
@@ -56,6 +59,7 @@ class ContactModel {
       website: map['website'] ?? '',
       image: map['image'] ?? '',
       dob: map['dob'] ?? '',
+      dobTimestamp: map['dob_timestamp'],
       favorite: map['favorite'] == 0 ? false : true,
     );
   }
