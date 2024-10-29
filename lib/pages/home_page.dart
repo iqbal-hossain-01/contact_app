@@ -116,9 +116,14 @@ class _HomePageState extends State<HomePage> {
               label: 'All',
             ),
             BottomNavigationBarItem(
+                icon: Icon(Icons.group),
+                label: 'Group'
+            ),
+            BottomNavigationBarItem(
               icon: Icon(Icons.favorite),
               label: 'Favorite',
             ),
+
           ],
         ),
       ),

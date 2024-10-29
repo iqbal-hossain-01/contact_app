@@ -34,7 +34,6 @@ class LocalDbProvider with ChangeNotifier{
 
   Future<void> getAllFavoriteContacts() async {
     _contactList = await _db.getAllFavoriteContact();
-    _favoriteContactList = _contactList.where((c) => c.favorite == true).toList();
     notifyListeners();
   }
 

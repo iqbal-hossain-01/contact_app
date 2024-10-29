@@ -2,6 +2,28 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+    <!-- Allow HTTP/HTTPS links -->
+    <key>NSAppTransportSecurity</key>
+    <dict>
+        <key>NSAllowsArbitraryLoads</key>
+         <true/>
+    </dict>
+
+    <!-- Required schemes for URL Launcher -->
+    <key>LSApplicationQueriesSchemes</key>
+     <array>
+         <!-- Call support -->
+         <string>tel</string>
+         <!-- SMS support -->
+         <string>sms</string>
+         <!-- Mail support -->
+         <string>mailto</string>
+         <!-- Maps support -->
+         <string>geo</string>
+         <!-- Web support -->
+         <string>http</string>
+         <string>https</string>
+     </array>
     <key>NSCameraUsageDescription</key>
     <string>Take a photo using your device's camera.</string>
     <key>NSPhotoLibraryUsageDescription</key>

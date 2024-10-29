@@ -4,8 +4,10 @@ import 'dart:io';
 import 'package:contact_app/models/contact_model.dart';
 import 'package:contact_app/pages/new_contact_page.dart';
 import 'package:contact_app/providers/local_db_provider.dart';
+import 'package:contact_app/utils/helper_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class ContactDetailsPage extends StatefulWidget {
   static const String routeName = '/detail';
@@ -89,25 +91,35 @@ class _ContactDetailsPageState extends State<ContactDetailsPage> {
                     trailing: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        IconButton(onPressed: () {}, icon: const Icon(Icons.call)),
-                        IconButton(onPressed: () {}, icon: const Icon(Icons.message)),
+                        IconButton(onPressed: () {
+                          _launchCall(contact.number);
+                        }, icon: const Icon(Icons.call)),
+                        IconButton(onPressed: () {
+                          _launchSms(contact.number);
+                        }, icon: const Icon(Icons.message)),
                       ],
                     ),
                   ),
                   if (contact.email?.isNotEmpty == true)
                     ListTile(
                       title: Text(contact.email!.trim()),
-                      trailing: const Icon(Icons.email),
+                      trailing: IconButton(onPressed: () {
+                        _launchMail(contact.email!);
+                      }, icon: const Icon(Icons.email),),
                     ),
                   if (contact.address?.isNotEmpty == true)
                     ListTile(
                       title: Text(contact.address!.trim()),
-                      trailing: const Icon(Icons.location_city_sharp),
+                      trailing: IconButton(onPressed: () {
+                        _openMap(contact.address!);
+                      }, icon: const Icon(Icons.location_city_sharp),),
                     ),
                   if (contact.website?.isNotEmpty == true)
                     ListTile(
                       title: Text(contact.website!.trim()),
-                      trailing: const Icon(Icons.web),
+                      trailing: IconButton(onPressed: () {
+                        _launchWeb(contact.website!);
+                      }, icon: const Icon(Icons.web),),
                     ),
                   if (contact.dob?.isNotEmpty == true)
                     ListTile(
@@ -135,6 +147,68 @@ class _ContactDetailsPageState extends State<ContactDetailsPage> {
         ),
       ),
     );
+  }
+
+  void _launchCall(String mobile) async {
+    final url = 'tel:$mobile';
+    if (await canLaunchUrlString(url)) {
+      await launchUrlString(url);
+    } else {
+      showMsg(context, 'Cannot perform this task');
+    }
+  }
+
+  void _launchSms(String number) async {
+    final url = 'sms:$number';
+    if (await canLaunchUrlString(url)) {
+      await launchUrlString(url);
+    } else {
+      showMsg(context, 'Cannot perform this task');
+    }
+  }
+  void _launchMail(String email) async {
+    final Uri emailUri = Uri(
+      scheme: 'mailto',
+      path: email,
+    );
+    final url = emailUri.toString();
+    if (await canLaunchUrlString(url)) {
+      await launchUrlString(url);
+    } else {
+      showMsg(context, 'Cannot perform this task');
+    }
+  }
+
+  // void _launchMail(String email) async {
+  //   final url = 'mailto:$email';
+  //   if (await canLaunchUrlString(url)) {
+  //     await launchUrlString(url);
+  //   } else {
+  //     showMsg(context, 'Cannot perform this task');
+  //   }
+  // }
+
+  void _launchWeb(String website) async {
+    final url = 'https:$website';
+    if (await canLaunchUrlString(url)) {
+      await launchUrlString(url);
+    } else {
+      showMsg(context, 'Cannot perform this task');
+    }
+  }
+
+  void _openMap(String address) async {
+    String url;
+    if (Platform.isAndroid) {
+      url = 'geo:0,0?q=$address';
+    } else {
+      url = 'http://maps.apple.com/?q=$address';
+    }
+    if (await canLaunchUrlString(url)) {
+      await launchUrlString(url);
+    } else {
+      showMsg(context, 'Cannot perform this task');
+    }
   }
 }
 
